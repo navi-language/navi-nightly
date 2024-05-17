@@ -1,4 +1,4 @@
-name: Trigger Website
+name: Deploy Website
 on:
   release:
     types:
@@ -23,11 +23,3 @@ jobs:
               workflow_id: 'publish.yml',
               ref: 'main'
             })
-  deploy-playground:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Trigger
-        env:
-          RENDER_TOKEN: ${{ secrets.RENDER_TOKEN }}
-        run: |
-          curl https://api.render.com/deploy/$RENDER_TOKEN
