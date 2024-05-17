@@ -1,0 +1,33 @@
+name: Trigger Website
+on:
+  release:
+    types:
+      - published
+      - unpublished
+      - edited
+      - deleted
+      - prereleased
+      - released
+
+jobs:
+  deploy-website:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.NAVI_WEBSITE_TOKEN }}
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: 'navi-language',
+              repo: 'website',
+              workflow_id: 'publish.yml',
+              ref: 'main'
+            })
+  deploy-playground:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger
+        env:
+          RENDER_TOKEN: ${{ secrets.RENDER_TOKEN }}
+        run: |
+          curl https://api.render.com/deploy/$RENDER_TOKEN
